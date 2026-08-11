@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <title>Propagação de Ondas Sonoras</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>Propagação de Ondas Sonoras</h1>
+    <p class="subtitulo">Capture, analise e compare instrumentos musicais em tempo real</p>
+  </header>
+
+  <main>
+    <div class="main-content">
+
+      <!-- ============================================================
+           SIDEBAR
+      ============================================================ -->
+      <aside class="parametros" id="sidebar">
+
+        <!-- ETAPA 1: Escolha o instrumento -->
+        <div id="sidebar-etapa1">
+          <h2>Parâmetros</h2>
+          <p class="sidebar-desc">Escolha qual instrumento você vai tocar <strong>primeiro</strong>:</p>
+          <div class="cards-instrumento">
+
+            <button class="card-instrumento" id="card-violao" data-instrumento="violao">
+              <span class="icone-instrumento">
+                <svg viewBox="0 0 36 44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <rect x="13.5" y="1" width="9" height="4" rx="2" />
+                  <rect x="15.5" y="5" width="5" height="12" rx="1" />
+                  <path
+                    d="M15.5 17 Q9 18 9 22 Q9 25 11 25.5 Q9 26 9 30 Q9 37 18 38 Q27 37 27 30 Q27 26 25 25.5 Q27 25 27 22 Q27 18 20.5 17 Z" />
+                  <circle cx="18" cy="28.5" r="3" />
+                  <line x1="16.8" y1="5.5" x2="16.8" y2="38" stroke-width="0.9" opacity="0.45" />
+                  <line x1="19.2" y1="5.5" x2="19.2" y2="38" stroke-width="0.9" opacity="0.45" />
+                </svg>
+              </span>
+              <span class="nome-instrumento">Violão</span>
+            </button>
+
+            <button class="card-instrumento" id="card-flauta" data-instrumento="flauta">
+              <span class="icone-instrumento">
+                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+                  <rect x="2" y="14.5" width="32" height="7" rx="3.5" />
+                  <ellipse cx="6.5" cy="18" rx="2" ry="2.6" stroke-width="1.5" />
+                  <circle cx="14" cy="18" r="1.6" />
+                  <circle cx="20" cy="18" r="1.6" />
+                  <circle cx="26" cy="18" r="1.6" />
+                </svg>
+              </span>
+              <span class="nome-instrumento">Flauta</span>
+            </button>
+
+          </div>
+          <button class="botao" id="btn-comecar" disabled>
+            <svg class="icon-btn" viewBox="0 0 20 20" fill="currentColor">
+              <polygon points="5,3 17,10 5,17" />
+            </svg>
+            Começar captura
+          </button>
+        </div>
+
+        <!-- ETAPA 2: Status da captura -->
+        <div id="sidebar-etapa2" style="display:none">
+          <h2 id="sidebar-titulo-etapa2">Capturando Violão</h2>
+          <p class="sidebar-desc">Toque seu instrumento próximo ao microfone.</p>
+          <div class="info-box">
+            <div class="info-linha">
+              <span class="info-label">Nota em tempo real</span>
+              <span class="info-valor" id="sidebar-nota">--</span>
+            </div>
+            <div class="info-linha">
+              <span class="info-label">Frequência</span>
+              <span class="info-valor" id="sidebar-freq">-- Hz</span>
+            </div>
+            <div class="info-linha">
+              <span class="info-label">Afinação</span>
+              <span class="info-valor" id="sidebar-cents">-- ¢</span>
+            </div>
+          </div>
+          <p class="sidebar-status" id="sidebar-status-mic">Aguardando microfone...</p>
+          <button class="botao" id="btn-ativar-mic">
+            <svg class="icon-btn" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"
+              stroke-linecap="round">
+              <rect x="6.5" y="1.5" width="7" height="9" rx="3.5" />
+              <path d="M4 10 Q4 15 10 15 Q16 15 16 10" />
+              <line x1="10" y1="15" x2="10" y2="18" />
+              <line x1="7" y1="18" x2="13" y2="18" />
+            </svg>
+            Ativar microfone
+          </button>
+          <button class="botao botao-secundario" id="btn-proximo" disabled>
+            <svg class="icon-btn" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="10" x2="16" y2="10" />
+              <polyline points="11,5 16,10 11,15" />
+            </svg>
+            <span id="btn-proximo-label">Próximo instrumento</span>
+          </button>
+        </div>
+
+        <!-- ETAPA 3: Resumo -->
+        <div id="sidebar-etapa3" style="display:none">
+          <h2>Comparativo</h2>
+          <p class="sidebar-desc">Análise concluída! Veja o comparativo completo ao lado.</p>
+          <div class="info-box">
+            <div class="info-linha">
+              <span class="info-label" id="nome-inst1">Violão</span>
+              <span class="info-valor" id="res-nota1">--</span>
+            </div>
+            <div class="info-linha">
+              <span class="info-label" id="nome-inst2">Flauta</span>
+              <span class="info-valor" id="res-nota2">--</span>
+            </div>
+          </div>
+          <button class="botao botao-secundario" id="btn-recomecar">
+            <svg class="icon-btn" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3.5 10 A6.5 6.5 0 1 1 7 3.8" />
+              <polyline points="3.5 1 7 3.8 4.5 7.5" />
+            </svg>
+            Recomeçar
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- ============================================================
+           ÁREA PRINCIPAL
+      ============================================================ -->
+      <section class="calculos-bloco">
+
+        <div class="abas">
+          <button class="aba ativa" id="aba-captura" onclick="trocarAba('captura')">Captura</button>
+          <button class="aba" id="aba-comparativo" onclick="trocarAba('comparativo')">Comparativo</button>
+          <button class="aba" id="aba-calculos" onclick="trocarAba('calculos')">Segmento Áureo</button>
+        </div>
+
+        <!-- ─── ABA: CAPTURA ─── -->
+        <div class="calculos-conteudo" id="conteudo-captura">
+
+          <!-- Tela inicial -->
+          <div id="tela-escolha">
+            <div class="tela-intro">
+              <div class="intro-icon">
+                <svg class="eq-svg" viewBox="0 0 64 52" fill="none">
+                  <rect x="4" y="16" width="7" height="36" rx="3.5" fill="var(--cyan)" opacity="0.5" />
+                  <rect x="15" y="8" width="7" height="44" rx="3.5" fill="var(--cyan)" opacity="0.7" />
+                  <rect x="26" y="2" width="7" height="50" rx="3.5" fill="var(--cyan)" opacity="0.95" />
+                  <rect x="37" y="10" width="7" height="42" rx="3.5" fill="var(--cyan)" opacity="0.8" />
+                  <rect x="48" y="20" width="7" height="32" rx="3.5" fill="var(--cyan)" opacity="0.55" />
+                </svg>
+              </div>
+              <h2>Bem-vindo ao detector de ondas sonoras</h2>
+              <p>Use o painel ao lado para escolher o primeiro instrumento e iniciar a captura.</p>
+              <div class="fisica-cards">
+                <div class="fisica-card">
+                  <span class="fisica-card-icon">
+                    <svg viewBox="0 0 32 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                      <path d="M2 12 Q6 4 10 12 Q14 20 18 12 Q22 4 26 12 Q28 16 30 12" />
+                    </svg>
+                  </span>
+                  <strong>Onda sonora</strong>
+                  <small>Variação de pressão no ar que se propaga a ~343 m/s</small>
+                </div>
+                <div class="fisica-card">
+                  <span class="fisica-card-icon fisica-card-icon-text">Hz</span>
+                  <strong>Frequência</strong>
+                  <small>Número de oscilações por segundo — define o tom da nota</small>
+                </div>
+                <div class="fisica-card">
+                  <span class="fisica-card-icon">
+                    <svg viewBox="0 0 32 32" fill="currentColor" stroke="none">
+                      <rect x="12" y="9" width="2" height="14" />
+                      <rect x="21" y="6" width="2" height="14" />
+                      <polygon points="12,9 23,6 23,9.8 12,12.8" />
+                      <ellipse cx="11" cy="24" rx="3.8" ry="2.8" transform="rotate(-15 11 24)" />
+                      <ellipse cx="20" cy="21" rx="3.8" ry="2.8" transform="rotate(-15 20 21)" />
+                    </svg>
+                  </span>
+                  <strong>Nota musical</strong>
+                  <small>Calculada via escala temperada: cada semitom = ×2^(1/12)</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── CAPTURA 1 ─── -->
+          <div id="tela-captura" style="display:none">
+            <div class="captura-header">
+              <span class="captura-instrumento-icon" id="captura-icon"></span>
+              <h2 id="captura-titulo">Tocando Violão</h2>
+            </div>
+
+            <!-- Canvas de soundwaves estilo Chrome Music Lab -->
+            <div class="sw-wrap">
+              <canvas id="visualizador"></canvas>
+              <div class="sw-silence" id="sw-silence-1">Toque o instrumento para ver as ondas</div>
+            </div>
+
+            <!-- Última nota estável detectada -->
+            <div class="ultima-nota-box">
+              <span class="ultima-nota-label">Última nota detectada</span>
+              <div class="ultima-nota-row">
+                <div class="nota-principal" id="nota-display">--</div>
+                <div class="nota-detalhe">
+                  <div class="nota-simbolo" id="simbolo-display">--</div>
+                  <div class="freq-display" id="freq-display">-- Hz</div>
+                </div>
+                <span class="nota-ts" id="nota-ts-1"></span>
+              </div>
+              <div class="cents-display" id="cents-display">
+                <div class="cents-barra-wrap">
+                  <div class="cents-barra" id="cents-barra"></div>
+                  <div class="cents-zero"></div>
+                </div>
+                <span id="cents-texto">0 ¢</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── CAPTURA 2 ─── -->
+          <div id="tela-captura2" style="display:none">
+            <div class="captura-header">
+              <span class="captura-instrumento-icon" id="captura-icon2"></span>
+              <h2 id="captura-titulo2">Tocando Flauta</h2>
+            </div>
+
+            <div class="sw-wrap">
+              <canvas id="visualizador2"></canvas>
+              <div class="sw-silence" id="sw-silence-2">Toque o instrumento para ver as ondas</div>
+            </div>
+
+            <div class="ultima-nota-box">
+              <span class="ultima-nota-label">Última nota detectada</span>
+              <div class="ultima-nota-row">
+                <div class="nota-principal" id="nota-display2">--</div>
+                <div class="nota-detalhe">
+                  <div class="nota-simbolo" id="simbolo-display2">--</div>
+                  <div class="freq-display" id="freq-display2">-- Hz</div>
+                </div>
+                <span class="nota-ts" id="nota-ts-2"></span>
+              </div>
+              <div class="cents-display" id="cents-display2">
+                <div class="cents-barra-wrap">
+                  <div class="cents-barra" id="cents-barra2"></div>
+                  <div class="cents-zero"></div>
+                </div>
+                <span id="cents-texto2">0 ¢</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ─── ABA: COMPARATIVO ─── -->
+        <div class="calculos-conteudo" id="conteudo-comparativo" style="display:none">
+          <div id="comparativo-vazio" class="tela-intro">
+            <div class="intro-icon">
+              <svg viewBox="0 0 64 52" fill="none">
+                <rect x="6" y="20" width="14" height="32" rx="4" fill="var(--cyan)" opacity="0.5" />
+                <rect x="25" y="8" width="14" height="44" rx="4" fill="var(--cyan)" opacity="0.85" />
+                <rect x="44" y="28" width="14" height="24" rx="4" fill="var(--purple)" opacity="0.6" />
+              </svg>
+            </div>
+            <h2>Nenhum dado ainda</h2>
+            <p>Complete as duas capturas para ver o comparativo aqui.</p>
+          </div>
+          <div id="comparativo-dados" style="display:none">
+            <h2 class="secao-titulo">Comparativo entre instrumentos</h2>
+            <div class="comparativo-grid">
+
+              <div class="comp-card" id="comp-card-1">
+                <div class="comp-inst-icon" id="comp-icon-1"></div>
+                <h3 id="comp-nome-1">Violão</h3>
+                <div class="comp-stat"><span class="comp-label">Nota detectada</span><span class="comp-valor destaque"
+                    id="comp-nota-1">--</span></div>
+                <div class="comp-stat"><span class="comp-label">Símbolo</span><span class="comp-valor"
+                    id="comp-simbolo-1">--</span></div>
+                <div class="comp-stat"><span class="comp-label">Frequência captada</span><span class="comp-valor"
+                    id="comp-freq-1">-- Hz</span></div>
+                <div class="comp-stat"><span class="comp-label">Frequência esperada</span><span class="comp-valor"
+                    id="comp-freqe-1">-- Hz</span></div>
+                <div class="comp-stat"><span class="comp-label">Desvio de afinação</span><span class="comp-valor"
+                    id="comp-cents-1">-- ¢</span></div>
+              </div>
+
+              <div class="comp-vs">VS</div>
+
+              <div class="comp-card" id="comp-card-2">
+                <div class="comp-inst-icon" id="comp-icon-2"></div>
+                <h3 id="comp-nome-2">Flauta</h3>
+                <div class="comp-stat"><span class="comp-label">Nota detectada</span><span class="comp-valor destaque"
+                    id="comp-nota-2">--</span></div>
+                <div class="comp-stat"><span class="comp-label">Símbolo</span><span class="comp-valor"
+                    id="comp-simbolo-2">--</span></div>
+                <div class="comp-stat"><span class="comp-label">Frequência captada</span><span class="comp-valor"
+                    id="comp-freq-2">-- Hz</span></div>
+                <div class="comp-stat"><span class="comp-label">Frequência esperada</span><span class="comp-valor"
+                    id="comp-freqe-2">-- Hz</span></div>
+                <div class="comp-stat"><span class="comp-label">Desvio de afinação</span><span class="comp-valor"
+                    id="comp-cents-2">-- ¢</span></div>
+              </div>
+
+            </div>
+            <div class="comp-analise" id="comp-analise"></div>
+          </div>
+        </div>
+
+        <!-- ─── ABA: SEGMENTO ÁUREO ─── -->
+        <div class="calculos-conteudo" id="conteudo-calculos" style="display:none">
+          <h2 class="secao-titulo">Frequência e Segmento Áureo</h2>
+
+          <div class="pergunta-pesquisa">
+            <span class="pergunta-pesquisa-label">Pergunta de pesquisa</span>
+            <p>É possível encontrar relações próximas à razão áurea entre as frequências de notas produzidas por diferentes instrumentos musicais?</p>
+          </div>
+
+          <div class="calculo-bloco">
+            <h3>1. O que é a razão áurea?</h3>
+            <p>O segmento áureo é uma divisão de um segmento em duas partes de forma que a razão entre a parte maior e a parte menor seja igual à razão entre o segmento inteiro e a parte maior.</p>
+            <div class="formula-box"><code>φ = (1 + √5) ÷ 2 ≈ 1,618033</code></div>
+            <p>Essa proporção pode ser estudada em diferentes grandezas. Como nosso experimento mede frequências em hertz, podemos comparar as frequências captadas por meio de uma razão.</p>
+          </div>
+
+          <div class="calculo-bloco">
+            <h3>2. Comparando as frequências captadas</h3>
+            <p>Depois de tocar os dois instrumentos, o sistema utiliza as frequências detectadas para calcular a razão entre a maior e a menor frequência.</p>
+            <div class="aureo-dados">
+              <div class="aureo-dado">
+                <span>Menor frequência</span>
+                <strong id="aureo-menor">-- Hz</strong>
+              </div>
+              <div class="aureo-dado">
+                <span>Maior frequência</span>
+                <strong id="aureo-maior">-- Hz</strong>
+              </div>
+              <div class="aureo-dado">
+                <span>Razão das frequências</span>
+                <strong id="aureo-razao">--</strong>
+              </div>
+            </div>
+            <div class="formula-box"><code>razão = frequência maior ÷ frequência menor</code></div>
+            <div class="exemplo-calculo" id="aureo-resultado">
+              Complete as duas capturas para calcular a relação.
+            </div>
+          </div>
+
+          <div class="calculo-bloco">
+            <h3>3. Comparação com o número áureo</h3>
+            <p>Agora comparamos a razão encontrada no experimento com φ. Quanto mais próximos forem os valores, mais próxima a relação entre as duas frequências estará da proporção áurea.</p>
+            <div class="aureo-comparacao">
+              <div>
+                <span>Razão encontrada</span>
+                <strong id="aureo-razao-2">--</strong>
+              </div>
+              <div>
+                <span>Número áureo (φ)</span>
+                <strong>1,618033</strong>
+              </div>
+              <div>
+                <span>Diferença</span>
+                <strong id="aureo-diferenca">--</strong>
+              </div>
+            </div>
+            <div class="aureo-status" id="aureo-status">Aguardando as frequências dos instrumentos.</div>
+          </div>
+
+          <div class="calculo-bloco">
+            <h3>4. Construindo o segmento áureo</h3>
+            <p>Para visualizar a proporção, usamos a maior frequência como referência. O segmento é dividido matematicamente na razão áurea. Assim, conseguimos visualizar como uma grandeza pode ser separada em duas partes mantendo a proporção φ.</p>
+            <div class="aureo-segmento">
+              <div class="aureo-parte maior" id="aureo-parte-maior">
+                <strong id="aureo-parte-maior-valor">--</strong>
+                <small>parte maior</small>
+              </div>
+              <div class="aureo-parte menor" id="aureo-parte-menor">
+                <strong id="aureo-parte-menor-valor">--</strong>
+                <small>parte menor</small>
+              </div>
+            </div>
+            <div class="aureo-legenda">
+              <span>A ÷ B = φ ≈ 1,618</span>
+              <span id="aureo-total">Total: --</span>
+            </div>
+          </div>
+
+          <div class="calculo-bloco">
+            <h3>5. Relatório da análise</h3>
+            <p>Um resumo compacto do experimento, como se fosse a saída impressa do sistema:</p>
+            <div class="relatorio-aureo" id="relatorio-aureo">
+              <p class="relatorio-vazio">Complete as duas capturas para gerar o relatório.</p>
+            </div>
+          </div>
+
+          <div class="calculo-bloco">
+            <h3>6. O que isso significa no nosso experimento?</h3>
+            <p>As frequências musicais não são organizadas naturalmente pela razão áurea. A escala temperada utiliza outras relações matemáticas, como a divisão da oitava em 12 semitons. Por isso, o objetivo aqui não é afirmar que toda frequência musical segue o segmento áureo, mas usar as frequências medidas pelo site para investigar uma proporção matemática.</p>
+            <div class="aureo-aviso">
+              <strong>Cuidado com a conclusão:</strong> o site não afirma que "a flauta e o violão possuem frequências na razão áurea". Ele apenas <em>verifica se a relação entre duas frequências musicais apresenta proximidade com a razão áurea</em> — em algumas notas isso acontece, em outras não, e as duas situações são resultados válidos do experimento.
+            </div>
+            <div class="exemplo-calculo">
+              <strong>Conclusão:</strong> o site transforma o som captado pelo microfone em valores numéricos e, a partir deles, permite comparar duas frequências com a razão áurea e visualizar matematicamente essa proporção.
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 — Propagação de Ondas Sonoras</p>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
