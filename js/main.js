@@ -191,11 +191,11 @@ function desenharOnda(canvas, buffer, rms) {
     ctx.clearRect(0, 0, W, H);
 
     // Fundo
-    ctx.fillStyle = "#04040f";
+    ctx.fillStyle = "#241a10";
     ctx.fillRect(0, 0, W, H);
 
     // Linha central de referência
-    ctx.strokeStyle = "rgba(255,255,255,0.05)";
+    ctx.strokeStyle = "rgba(255,255,255,0.10)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(0, H / 2);
@@ -207,13 +207,13 @@ function desenharOnda(canvas, buffer, rms) {
         return;
     }
 
-    // Onda com gradiente baseado na amplitude local
+    // Onda com gradiente baseado na amplitude local (tons dourados da paleta)
     const amp = Math.min(rms * 6, 1);            // 0..1 para cor
-    const cyanR = 0, cyanG = 209, cyanB = 255;
-    const purpR = 157, purpG = 51, purpB = 255;
-    const r = Math.round(cyanR + (purpR - cyanR) * amp);
-    const g = Math.round(cyanG + (purpG - cyanG) * amp);
-    const b = Math.round(cyanB + (purpB - cyanB) * amp);
+    const calmR = 168, calmG = 117, calmB = 43;   // dourado suave (calmo)
+    const loudR = 224, loudG = 154, loudB = 60;   // âmbar vivo (som mais forte)
+    const r = Math.round(calmR + (loudR - calmR) * amp);
+    const g = Math.round(calmG + (loudG - calmG) * amp);
+    const b = Math.round(calmB + (loudB - calmB) * amp);
 
     const grd = ctx.createLinearGradient(0, 0, W, 0);
     grd.addColorStop(0, `rgba(${r},${g},${b},0.3)`);
