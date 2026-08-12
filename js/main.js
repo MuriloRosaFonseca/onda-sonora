@@ -668,8 +668,6 @@ function gerarAnalise() {
                 ? NOMES[inst1] : NOMES[inst2];
             html += `<p><strong>Afinação:</strong> O <strong>${maisAf}</strong> estava mais próximo da nota perfeita (diferença entre os dois: ${diffCents} ¢).</p>`;
         }
-
-        html += `<p><strong>Por que as ondas são diferentes?</strong> Mesmo tocando a mesma nota, violão e flauta podem produzir ondas diferentes por causa do <em>timbre</em>. Cada instrumento combina a frequência fundamental com diferentes harmônicas, criando uma forma de onda característica. O violão geralmente apresenta uma forma de onda mais complexa, enquanto a flauta pode produzir uma onda mais próxima de uma senoide.</p>`;
         html += `<p><strong>Resumo:</strong><br>`;
         html += `${NOMES[inst1]}: ${r1.freq.toFixed(2)} Hz → ${r1.nota.nome} (${r1.nota.simbolo}) | ${r1.nota.diferencaCents > 0 ? "+" : ""}${r1.nota.diferencaCents} ¢<br>`;
         html += `${NOMES[inst2]}: ${r2.freq.toFixed(2)} Hz → ${r2.nota.nome} (${r2.nota.simbolo}) | ${r2.nota.diferencaCents > 0 ? "+" : ""}${r2.nota.diferencaCents} ¢</p>`;
